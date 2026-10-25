@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — KeralaTrips</title>
+  <meta name="description" content="Sign in to your KeralaTrips account to access your personalized Kerala travel plans and saved destinations."/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .auth-bg{position:fixed;inset:0;z-index:0;}
+    .auth-bg-img{width:100%;height:100%;object-fit:cover;opacity:0.12;}
+    .auth-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(3,13,18,0.97),rgba(7,24,32,0.95));}
+    .floating-shapes{position:fixed;inset:0;pointer-events:none;z-index:0;}
+    .shape{position:absolute;border-radius:50%;animation:float 8s ease-in-out infinite;}
+    .shape-1{width:400px;height:400px;background:radial-gradient(circle,rgba(0,229,160,0.06),transparent 70%);top:-100px;right:-100px;}
+    .shape-2{width:300px;height:300px;background:radial-gradient(circle,rgba(0,206,201,0.05),transparent 70%);bottom:-50px;left:-50px;animation-delay:-4s;}
+    .shape-3{width:200px;height:200px;background:radial-gradient(circle,rgba(255,209,102,0.04),transparent 70%);top:40%;left:10%;animation-delay:-2s;}
+    .password-toggle{position:absolute;right:16px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--clr-muted);cursor:pointer;font-size:0.95rem;transition:color 0.2s;}
+    .password-toggle:hover{color:var(--clr-em);}
+    .form-check{display:flex;align-items:center;gap:10px;font-size:0.875rem;color:var(--clr-muted);}
+    .form-check input[type=checkbox]{accent-color:var(--clr-em);width:16px;height:16px;cursor:pointer;}
+    .strength-bar{height:4px;border-radius:99px;background:var(--clr-border);margin-top:8px;overflow:hidden;}
+    .strength-fill{height:100%;border-radius:99px;width:0;transition:width 0.4s,background 0.4s;}
+    .auth-split{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+    .auth-left{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:48px;}
+    .auth-left-bg{position:absolute;inset:0;}
+    .auth-left-bg img{width:100%;height:100%;object-fit:cover;}
+    .auth-left-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(3,13,18,0.95) 0%,rgba(3,13,18,0.5) 60%,rgba(3,13,18,0.3) 100%);}
+    .auth-left-content{position:relative;z-index:1;}
+    .auth-left-quote{font-family:var(--font-display);font-style:italic;font-size:1.8rem;line-height:1.3;margin-bottom:16px;}
+    .auth-right{display:flex;align-items:center;justify-content:center;padding:40px 24px;background:var(--clr-bg);}
+    .logo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:32px;font-size:1.4rem;font-weight:800;}
+    .success-msg{background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.3);border-radius:var(--radius-sm);padding:12px 16px;font-size:0.875rem;color:var(--clr-em);display:none;align-items:center;gap:8px;margin-bottom:16px;}
+    .error-msg{background:rgba(255,107,107,0.1);border:1px solid rgba(255,107,107,0.3);border-radius:var(--radius-sm);padding:12px 16px;font-size:0.875rem;color:var(--clr-coral);display:none;align-items:center;gap:8px;margin-bottom:16px;}
+    @media(max-width:900px){
+      .auth-split{grid-template-columns:1fr;}
+      .auth-left{display:none;}
+      .auth-right{min-height:100vh;}
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-split">
+
+  <!-- LEFT PANEL -->
+  <div class="auth-left">
+    <div class="auth-left-bg">
+      <img src="images/alleppey.png" alt="Kerala backwaters"/>
+    </div>
+    <div class="auth-left-content">
+      <div class="logo-wrap">
+        <div class="logo-icon">🌴</div>
+        Kerala<span class="gradient-text">Trips</span>
+      </div>
+      <p class="auth-left-quote gradient-text">"Kerala is not just a destination — it's a feeling."</p>
+      <p style="color:rgba(255,255,255,0.6);font-size:0.9rem;line-height:1.7;">Sign in to access your personalized travel plans, saved destinations and AI-crafted Kerala itineraries.</p>
+      <div style="display:flex;gap:16px;margin-top:28px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(255,255,255,0.6);">
+          <i class="fa-solid fa-shield-halved" style="color:var(--clr-em);"></i> 256-bit Encrypted
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(255,255,255,0.6);">
+          <i class="fa-solid fa-lock" style="color:var(--clr-em);"></i> Privacy Protected
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;font-size:0.8rem;color:rgba(255,255,255,0.6);">
+          <i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 12,000+ Travellers
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — FORM -->
+  <div class="auth-right">
+    <div style="width:100%;max-width:420px;">
+
+      <!-- Mobile Logo -->
+      <div class="logo-wrap" style="display:none;" id="mobileLogo">
+        <div class="logo-icon">🌴</div>
+        Kerala<span class="gradient-text">Trips</span>
+      </div>
+
+      <div class="auth-header" style="text-align:left;">
+        <h1 style="font-size:2rem;font-weight:800;margin-bottom:8px;">Welcome back 👋</h1>
+        <p style="color:var(--clr-muted);">Sign in to continue your Kerala adventure</p>
+      </div>
+
+      <!-- Social Login -->
+      <div class="social-login">
+        <button class="social-login-btn" id="googleBtn">
+          <span style="font-size:1.1rem;">🔵</span> Google
+        </button>
+        <button class="social-login-btn" id="fbBtn">
+          <span style="font-size:1.1rem;">📘</span> Facebook
+        </button>
+      </div>
+
+      <div class="auth-divider">or continue with email</div>
+
+      <!-- Messages -->
+      <div class="success-msg" id="successMsg">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>Login successful! Redirecting to your dashboard...</span>
+      </div>
+      <div class="error-msg" id="errorMsg">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="errorText">Invalid email or password. Please try again.</span>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <div class="form-icon-wrap">
+            <i class="fa-solid fa-envelope form-icon"></i>
+            <input type="email" id="email" class="form-control" placeholder="yourname@email.com" required autocomplete="email"/>
+          </div>
+          <div id="emailErr" style="font-size:0.78rem;color:var(--clr-coral);margin-top:6px;display:none;">Please enter a valid email address.</div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <label class="form-label" for="password">Password</label>
+            <a href="#" style="font-size:0.8rem;color:var(--clr-em);">Forgot password?</a>
+          </div>
+          <div class="form-icon-wrap" style="position:relative;">
+            <i class="fa-solid fa-lock form-icon"></i>
+            <input type="password" id="password" class="form-control" placeholder="Enter your password" required autocomplete="current-password"/>
+            <button type="button" class="password-toggle" id="togglePwd" title="Show/Hide password">
+              <i class="fa-solid fa-eye" id="pwdEyeIcon"></i>
+            </button>
+          </div>
+          <div id="pwdErr" style="font-size:0.78rem;color:var(--clr-coral);margin-top:6px;display:none;">Password must be at least 6 characters.</div>
+        </div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+          <label class="form-check">
+            <input type="checkbox" id="rememberMe"/> Remember me for 30 days
+          </label>
+        </div>
+
+        <button type="submit" class="btn btn-primary" id="loginBtn" style="width:100%;justify-content:center;padding:16px;">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
+          <span id="loginBtnText">Sign In to KeralaTrips</span>
+        </button>
+      </form>
+
+      <div class="auth-footer-text" style="margin-top:28px;">
+        Don't have an account? <a href="register.html">Create free account →</a>
+      </div>
+
+      <div style="margin-top:24px;text-align:center;">
+        <a href="index.html" style="font-size:0.85rem;color:var(--clr-muted);">
+          <i class="fa-solid fa-arrow-left"></i> Back to homepage
+        </a>
+      </div>
+
+      <!-- Demo credentials hint -->
+      <div style="margin-top:24px;padding:14px;background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);border-radius:10px;font-size:0.8rem;color:var(--clr-muted);">
+        <strong style="color:var(--clr-em);">Demo Access:</strong> Use any email + password (6+ chars) to login
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Toggle password visibility
+document.getElementById('togglePwd').addEventListener('click',()=>{
+  const pwd=document.getElementById('password');
+  const icon=document.getElementById('pwdEyeIcon');
+  if(pwd.type==='password'){pwd.type='text';icon.className='fa-solid fa-eye-slash';}
+  else{pwd.type='password';icon.className='fa-solid fa-eye';}
+});
+
+// Responsive: show mobile logo
+if(window.innerWidth<=900) document.getElementById('mobileLogo').style.display='flex';
+
+// Form submission
+document.getElementById('loginForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  let valid=true;
+
+  document.getElementById('emailErr').style.display='none';
+  document.getElementById('pwdErr').style.display='none';
+  document.getElementById('errorMsg').style.display='none';
+
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    document.getElementById('emailErr').style.display='block';
+    valid=false;
+  }
+  if(password.length<6){
+    document.getElementById('pwdErr').style.display='block';
+    valid=false;
+  }
+  if(!valid) return;
+
+  const btn=document.getElementById('loginBtn');
+  const btnText=document.getElementById('loginBtnText');
+  btn.disabled=true;
+  btnText.textContent='Signing in...';
+  btn.style.opacity='0.8';
+
+  setTimeout(()=>{
+    const success=document.getElementById('successMsg');
+    success.style.display='flex';
+    btnText.textContent='Sign In to KeralaTrips';
+    btn.disabled=false;
+    btn.style.opacity='1';
+    setTimeout(()=>{ window.location.href='index.html'; },1800);
+  },1500);
+});
+
+// Social login simulation
+document.getElementById('googleBtn').addEventListener('click',()=>{
+  document.getElementById('googleBtn').textContent='🔵 Connecting...';
+  setTimeout(()=>{
+    document.getElementById('successMsg').style.display='flex';
+    setTimeout(()=>window.location.href='index.html',1500);
+  },1200);
+});
+document.getElementById('fbBtn').addEventListener('click',()=>{
+  document.getElementById('fbBtn').textContent='📘 Connecting...';
+  setTimeout(()=>{
+    document.getElementById('successMsg').style.display='flex';
+    setTimeout(()=>window.location.href='index.html',1500);
+  },1200);
+});
+</script>
+</body>
+</html>

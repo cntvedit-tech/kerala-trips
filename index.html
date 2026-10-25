@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KeralaTrips — God's Own Country | Kerala Travel Planner</title>
+  <meta name="description" content="Plan your perfect Kerala trip. Explore backwaters, hill stations, beaches, wildlife and cultural heritage of God's Own Country with AI-powered trip planning."/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    /* ── Hero ── */
+    .hero{position:relative;min-height:100vh;display:flex;align-items:center;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;z-index:0;}
+    .hero-bg img{width:100%;height:100%;object-fit:cover;opacity:0.35;}
+    .hero-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(3,13,18,0.92) 0%,rgba(3,13,18,0.7) 50%,rgba(3,13,18,0.85) 100%);}
+    .hero-content{position:relative;z-index:2;max-width:780px;}
+    .hero-badge{display:inline-flex;align-items:center;gap:10px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.3);border-radius:99px;padding:8px 20px;font-size:0.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--clr-em);margin-bottom:28px;animation:fadeUp 0.8s ease both;}
+    .hero-badge .dot{width:8px;height:8px;background:var(--clr-em);border-radius:50%;animation:pulse-glow 2s infinite;}
+    .hero-title{font-size:clamp(2.8rem,6vw,5.5rem);font-weight:900;line-height:1.05;margin-bottom:24px;animation:fadeUp 0.8s ease 0.15s both;}
+    .hero-title .line2{font-family:var(--font-display);font-style:italic;font-size:clamp(3rem,6.5vw,6rem);}
+    .hero-sub{font-size:1.15rem;color:var(--clr-muted);max-width:560px;margin-bottom:40px;animation:fadeUp 0.8s ease 0.3s both;}
+    .hero-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;animation:fadeUp 0.8s ease 0.45s both;}
+    .hero-stats{display:flex;gap:36px;margin-top:56px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.08);animation:fadeUp 0.8s ease 0.6s both;}
+    .hero-stat-val{font-size:1.8rem;font-weight:800;font-family:var(--font-mono);color:var(--clr-em);}
+    .hero-stat-label{font-size:0.8rem;color:var(--clr-muted);margin-top:2px;}
+    .hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:0.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--clr-muted);}
+    .scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--clr-em),transparent);animation:float 2s ease-in-out infinite;}
+    .floating-card{position:absolute;z-index:3;border-radius:var(--radius-md);padding:16px 20px;animation:float 6s ease-in-out infinite;}
+    .fc1{right:8%;top:25%;animation-delay:-2s;}
+    .fc2{right:12%;bottom:30%;animation-delay:-4s;}
+    /* ── Search Bar ── */
+    .search-section{background:var(--clr-bg);padding:0;margin-top:-2px;}
+    .search-bar{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:var(--radius-xl);padding:8px;display:flex;align-items:center;gap:8px;max-width:900px;margin:0 auto;transform:translateY(-28px);backdrop-filter:blur(20px);box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+    .search-field{flex:1;display:flex;align-items:center;gap:10px;padding:12px 20px;border-right:1px solid rgba(255,255,255,0.08);}
+    .search-field:last-child{border-right:none;}
+    .search-field i{color:var(--clr-em);font-size:1rem;flex-shrink:0;}
+    .search-field input,.search-field select{background:none;border:none;outline:none;color:var(--clr-text);font-size:0.9rem;font-family:var(--font-main);width:100%;}
+    .search-field select option{background:var(--clr-bg2);}
+    .search-field .sf-label{font-size:0.7rem;color:var(--clr-muted);display:block;margin-bottom:2px;font-weight:600;letter-spacing:1px;text-transform:uppercase;}
+    /* ── Destinations Grid ── */
+    .dest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .dest-grid .dest-card{height:420px;}
+    .dest-card-large{grid-column:span 2;height:420px!important;}
+    /* ── Why Kerala ── */
+    .why-section{background:var(--clr-bg2);}
+    .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+    .why-img-wrap{position:relative;}
+    .why-img-main{border-radius:var(--radius-xl);overflow:hidden;height:560px;}
+    .why-img-main img{width:100%;height:100%;object-fit:cover;}
+    .why-img-float{position:absolute;bottom:-30px;right:-30px;width:200px;border-radius:var(--radius-md);overflow:hidden;border:4px solid var(--clr-bg2);box-shadow:var(--shadow-card);}
+    .why-badge-float{position:absolute;top:-20px;left:-20px;background:linear-gradient(135deg,var(--clr-gold),var(--clr-gold2));color:#030d12;border-radius:var(--radius-md);padding:16px 20px;font-weight:700;font-size:0.85rem;box-shadow:0 8px 30px rgba(255,209,102,0.3);}
+    .why-badge-float .num{font-size:2rem;font-weight:900;display:block;}
+    .feature-item{display:flex;gap:16px;margin-bottom:28px;}
+    .feature-icon{width:48px;height:48px;border-radius:12px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);display:grid;place-items:center;font-size:1.2rem;color:var(--clr-em);flex-shrink:0;}
+    .feature-item h4{font-size:1rem;font-weight:700;margin-bottom:4px;}
+    .feature-item p{font-size:0.875rem;color:var(--clr-muted);}
+    /* ── Experiences ── */
+    .exp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+    .exp-card{border-radius:var(--radius-lg);padding:32px 24px;position:relative;overflow:hidden;transition:var(--transition);}
+    .exp-card:hover{transform:translateY(-8px);}
+    .exp-card::before{content:'';position:absolute;inset:0;background:inherit;filter:brightness(1.1);opacity:0;transition:opacity 0.3s;z-index:0;}
+    .exp-card:hover::before{opacity:1;}
+    .exp-icon{font-size:2.5rem;margin-bottom:20px;display:block;position:relative;z-index:1;}
+    .exp-card h3{font-size:1.2rem;font-weight:700;margin-bottom:8px;position:relative;z-index:1;}
+    .exp-card p{font-size:0.85rem;color:var(--clr-muted);position:relative;z-index:1;}
+    .exp-card-1{background:linear-gradient(135deg,rgba(0,229,160,0.08),rgba(0,229,160,0.02));}
+    .exp-card-2{background:linear-gradient(135deg,rgba(0,206,201,0.08),rgba(0,206,201,0.02));}
+    .exp-card-3{background:linear-gradient(135deg,rgba(255,209,102,0.08),rgba(255,209,102,0.02));}
+    .exp-card-4{background:linear-gradient(135deg,rgba(255,107,107,0.08),rgba(255,107,107,0.02));}
+    /* ── Stats Section ── */
+    .stats-section{background:linear-gradient(135deg,rgba(0,229,160,0.04),rgba(0,206,201,0.04));border-top:1px solid var(--clr-border);border-bottom:1px solid var(--clr-border);}
+    .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;text-align:center;}
+    .stat-label{font-size:0.9rem;color:var(--clr-muted);margin-top:8px;}
+    /* ── Testimonials ── */
+    .testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
+    .testi-card{border-radius:var(--radius-lg);padding:32px;transition:var(--transition);}
+    .testi-card:hover{transform:translateY(-5px);border-color:rgba(0,229,160,0.3);}
+    .testi-quote{font-size:2rem;color:var(--clr-em);margin-bottom:16px;}
+    .testi-text{font-size:0.95rem;color:var(--clr-muted);line-height:1.7;margin-bottom:24px;}
+    .testi-author{display:flex;align-items:center;gap:12px;}
+    .testi-avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));display:grid;place-items:center;font-size:1.1rem;font-weight:700;color:#030d12;flex-shrink:0;}
+    .testi-name{font-weight:700;font-size:0.9rem;}
+    .testi-role{font-size:0.8rem;color:var(--clr-muted);}
+    /* ── CTA Section ── */
+    .cta-section{position:relative;overflow:hidden;text-align:center;padding:120px 0;}
+    .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(0,229,160,0.1) 0%,transparent 70%);}
+    .cta-title{font-size:clamp(2rem,4vw,3.5rem);font-weight:900;margin-bottom:20px;}
+    .cta-sub{font-size:1.1rem;color:var(--clr-muted);max-width:500px;margin:0 auto 40px;}
+    /* ── AI Trip Planner ── */
+    .ai-section{background:var(--clr-bg2);}
+    .ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+    .ai-chat{border-radius:var(--radius-xl);padding:28px;min-height:380px;display:flex;flex-direction:column;}
+    .ai-chat-header{display:flex;align-items:center;gap:12px;padding-bottom:20px;border-bottom:1px solid var(--clr-border);margin-bottom:20px;}
+    .ai-avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));display:grid;place-items:center;font-size:1rem;animation:pulse-glow 3s infinite;}
+    .ai-msg{padding:12px 16px;border-radius:12px;font-size:0.875rem;max-width:85%;margin-bottom:12px;line-height:1.6;}
+    .ai-msg.bot{background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.15);align-self:flex-start;}
+    .ai-msg.user{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);align-self:flex-end;}
+    .ai-typing{display:flex;gap:4px;padding:12px 16px;}
+    .typing-dot{width:8px;height:8px;background:var(--clr-em);border-radius:50%;animation:float 1s ease-in-out infinite;}
+    .typing-dot:nth-child(2){animation-delay:0.2s;}
+    .typing-dot:nth-child(3){animation-delay:0.4s;}
+    /* Grid responsive */
+    @media(max-width:1024px){
+      .dest-grid{grid-template-columns:repeat(2,1fr);}
+      .dest-card-large{grid-column:span 1;}
+      .why-grid,.ai-grid{grid-template-columns:1fr;gap:48px;}
+      .exp-grid{grid-template-columns:repeat(2,1fr);}
+      .stats-grid{grid-template-columns:repeat(2,1fr);gap:32px;}
+      .testi-grid{grid-template-columns:repeat(2,1fr);}
+      .fc1,.fc2{display:none;}
+    }
+    @media(max-width:768px){
+      .dest-grid{grid-template-columns:1fr;}
+      .hero-stats{flex-wrap:wrap;gap:20px;}
+      .search-bar{flex-direction:column;transform:translateY(-20px);}
+      .search-field{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08);}
+      .exp-grid{grid-template-columns:1fr;}
+      .testi-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🌴</div>
+        <span>Kerala<span class="gradient-text">Trips</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="plan-trip.html">Plan Trip</a></li>
+        <li><a href="#experiences">Experiences</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">Sign In</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+        <button class="nav-toggle" id="navToggle">☰</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero" id="home">
+  <canvas id="particles-canvas"></canvas>
+  <div class="hero-bg">
+    <img src="images/hero_banner.png" alt="Kerala landscape"/>
+  </div>
+
+  <!-- Floating Info Cards -->
+  <div class="glass floating-card fc1">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:1.5rem;">🏡</span>
+      <div>
+        <div style="font-size:0.7rem;color:var(--clr-muted);text-transform:uppercase;letter-spacing:1px;">Top Rated</div>
+        <div style="font-weight:700;font-size:0.9rem;">Alleppey Backwaters</div>
+        <div class="stars">★★★★★ <span style="color:var(--clr-muted);">4.9</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glass floating-card fc2">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div style="background:linear-gradient(135deg,var(--clr-gold),var(--clr-gold2));border-radius:10px;width:38px;height:38px;display:grid;place-items:center;font-size:1.1rem;">🤖</div>
+      <div>
+        <div style="font-size:0.75rem;color:var(--clr-muted);">AI Planner</div>
+        <div style="font-weight:700;font-size:0.85rem;">Trip created in 30s</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="position:relative;z-index:2;">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        🇮🇳 Kerala · God's Own Country
+      </div>
+      <h1 class="hero-title">
+        Discover the Magic<br>
+        <span class="line2 gradient-text">of Kerala</span>
+      </h1>
+      <p class="hero-sub">
+        From misty tea gardens of Munnar to tranquil backwaters of Alleppey, let AI craft your perfect Kerala journey. Explore 50+ breathtaking destinations.
+      </p>
+      <div class="hero-actions">
+        <a href="plan-trip.html" class="btn btn-primary btn-lg">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Plan My Trip with AI
+        </a>
+        <a href="destinations.html" class="btn btn-outline btn-lg">
+          <i class="fa-solid fa-map"></i>
+          Explore Destinations
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-val">50+</div>
+          <div class="hero-stat-label">Destinations</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">12K+</div>
+          <div class="hero-stat-label">Happy Travellers</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">4.9★</div>
+          <div class="hero-stat-label">Average Rating</div>
+        </div>
+        <div>
+          <div class="hero-stat-val">100%</div>
+          <div class="hero-stat-label">Satisfaction</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ══ SEARCH BAR ══ -->
+<section class="search-section">
+  <div class="container">
+    <div class="search-bar">
+      <div class="search-field" style="flex:1.5;">
+        <i class="fa-solid fa-location-dot"></i>
+        <div style="flex:1;">
+          <span class="sf-label">Destination</span>
+          <input type="text" placeholder="Where in Kerala?"/>
+        </div>
+      </div>
+      <div class="search-field" style="flex:1;">
+        <i class="fa-solid fa-calendar"></i>
+        <div style="flex:1;">
+          <span class="sf-label">Travel Date</span>
+          <input type="date"/>
+        </div>
+      </div>
+      <div class="search-field" style="flex:1;">
+        <i class="fa-solid fa-users"></i>
+        <div style="flex:1;">
+          <span class="sf-label">Travellers</span>
+          <select>
+            <option>1 Adult</option>
+            <option>2 Adults</option>
+            <option>Family</option>
+            <option>Group</option>
+          </select>
+        </div>
+      </div>
+      <div class="search-field" style="flex:1;">
+        <i class="fa-solid fa-moon"></i>
+        <div style="flex:1;">
+          <span class="sf-label">Duration</span>
+          <select>
+            <option>3 Nights</option>
+            <option>5 Nights</option>
+            <option>7 Nights</option>
+            <option>10 Nights</option>
+          </select>
+        </div>
+      </div>
+      <a href="plan-trip.html" class="btn btn-primary" style="white-space:nowrap;border-radius:16px;padding:14px 28px;">
+        <i class="fa-solid fa-magnifying-glass"></i> Search
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURED DESTINATIONS ══ -->
+<section class="section" id="destinations">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:48px;flex-wrap:wrap;gap:20px;">
+      <div>
+        <div class="section-tag reveal">✦ Popular Places</div>
+        <h2 class="section-title reveal">Top Kerala <span class="gradient-text">Destinations</span></h2>
+        <p class="section-subtitle reveal">Handpicked destinations showcasing Kerala's incredible diversity — from serene backwaters to lush hill stations.</p>
+      </div>
+      <a href="destinations.html" class="btn btn-outline reveal">View All <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="dest-grid">
+      <!-- Card 1 — Large -->
+      <div class="dest-card dest-card-large reveal">
+        <span class="badge badge-hot">🔥 Most Popular</span>
+        <img src="images/alleppey.png" alt="Alleppey Backwaters"/>
+        <div class="dest-card-info">
+          <span class="dest-card-tag">🚤 Backwaters</span>
+          <div class="dest-card-title">Alleppey Backwaters</div>
+          <div class="dest-card-sub">Venice of the East — houseboat cruises through emerald lagoons</div>
+          <div class="dest-card-meta">
+            <span><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.9</span>
+            <span><i class="fa-solid fa-clock"></i> 2–4 Days</span>
+            <span><i class="fa-solid fa-location-dot"></i> Alappuzha</span>
+          </div>
+          <div class="dest-card-explore">Explore <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="dest-card reveal" style="height:420px;">
+        <span class="badge badge-trending">📈 Trending</span>
+        <img src="images/munnar.png" alt="Munnar"/>
+        <div class="dest-card-info">
+          <span class="dest-card-tag">🏔️ Hill Station</span>
+          <div class="dest-card-title">Munnar</div>
+          <div class="dest-card-sub">Rolling tea gardens in the misty Western Ghats</div>
+          <div class="dest-card-meta">
+            <span><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+          </div>
+          <div class="dest-card-explore">Explore <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="dest-card reveal" style="height:420px;">
+        <span class="badge badge-new">✨ Must Visit</span>
+        <img src="images/varkala.png" alt="Varkala"/>
+        <div class="dest-card-info">
+          <span class="dest-card-tag">🏖️ Beach</span>
+          <div class="dest-card-title">Varkala</div>
+          <div class="dest-card-sub">Stunning clifftop beach with natural springs</div>
+          <div class="dest-card-meta">
+            <span><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span><i class="fa-solid fa-clock"></i> 2 Days</span>
+          </div>
+          <div class="dest-card-explore">Explore <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="dest-card reveal" style="height:420px;">
+        <img src="images/fort_kochi.png" alt="Fort Kochi"/>
+        <div class="dest-card-info">
+          <span class="dest-card-tag">🏛️ Heritage</span>
+          <div class="dest-card-title">Fort Kochi</div>
+          <div class="dest-card-sub">Colonial charm with iconic Chinese fishing nets</div>
+          <div class="dest-card-meta">
+            <span><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+          </div>
+          <div class="dest-card-explore">Explore <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="dest-card reveal" style="height:420px;">
+        <img src="images/wayanad.png" alt="Wayanad"/>
+        <div class="dest-card-info">
+          <span class="dest-card-tag">🌿 Wildlife</span>
+          <div class="dest-card-title">Wayanad</div>
+          <div class="dest-card-sub">Tribal culture, misty forests and wildlife reserves</div>
+          <div class="dest-card-meta">
+            <span><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+          </div>
+          <div class="dest-card-explore">Explore <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="dest-card reveal" style="height:420px;">
+        <span class="badge badge-hot">🌊 Top Beach</span>
+        <img src="images/kovalam.png" alt="Kovalam"/>
+        <div class="dest-card-info">
+          <span class="dest-card-tag">🏖️ Beach</span>
+          <div class="dest-card-title">Kovalam</div>
+          <div class="dest-card-sub">Crescent bay with lighthouse and water sports</div>
+          <div class="dest-card-meta">
+            <span><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.6</span>
+            <span><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+          </div>
+          <div class="dest-card-explore">Explore <i class="fa-solid fa-arrow-right"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:48px;">
+      <a href="destinations.html" class="btn btn-gold btn-lg reveal">
+        <i class="fa-solid fa-map-location-dot"></i>
+        Explore All 20+ Destinations
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ AI TRIP PLANNER ══ -->
+<section class="section ai-section" id="planner">
+  <div class="container">
+    <div class="ai-grid">
+      <div>
+        <div class="section-tag reveal-left">🤖 AI Powered</div>
+        <h2 class="section-title reveal-left">Plan Your Trip with <span class="gradient-text">Artificial Intelligence</span></h2>
+        <p class="section-subtitle reveal-left" style="margin-bottom:36px;">Our AI travel assistant learns your preferences and crafts a personalized Kerala itinerary in seconds — including hotels, activities, food, and local tips.</p>
+        <div class="feature-item reveal-left">
+          <div class="feature-icon"><i class="fa-solid fa-brain"></i></div>
+          <div>
+            <h4>Smart Itinerary Builder</h4>
+            <p>AI creates day-by-day plans optimized for travel time and your interests.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal-left">
+          <div class="feature-icon"><i class="fa-solid fa-hotel"></i></div>
+          <div>
+            <h4>Curated Accommodations</h4>
+            <p>From luxury houseboats to eco-resorts, matched to your budget and style.</p>
+          </div>
+        </div>
+        <div class="feature-item reveal-left">
+          <div class="feature-icon"><i class="fa-solid fa-utensils"></i></div>
+          <div>
+            <h4>Local Food Guide</h4>
+            <p>Discover authentic Kerala cuisine — from Sadhya to fresh seafood.</p>
+          </div>
+        </div>
+        <a href="plan-trip.html" class="btn btn-primary btn-lg reveal-left">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Start Planning Now
+        </a>
+      </div>
+
+      <div class="reveal-right">
+        <div class="ai-chat glass">
+          <div class="ai-chat-header">
+            <div class="ai-avatar">🤖</div>
+            <div>
+              <div style="font-weight:700;font-size:0.9rem;">Kerala AI Planner</div>
+              <div style="font-size:0.75rem;color:var(--clr-em);">● Online — Ready to plan</div>
+            </div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:4px;" id="chatContainer">
+            <div class="ai-msg bot">🌴 Hello! I'm your Kerala travel assistant. Tell me your dream Kerala experience!</div>
+            <div class="ai-msg user">I want backwaters + hill stations for 5 days in December.</div>
+            <div class="ai-msg bot">Perfect choice! December is ideal for Kerala. Here's your personalized plan:<br><br>📍 Day 1–2: Alleppey Backwaters houseboat cruise<br>📍 Day 3–4: Munnar tea gardens & Eravikulam<br>📍 Day 5: Thekkady wildlife safari<br><br>Shall I add hotel recommendations?</div>
+          </div>
+          <div style="margin-top:16px;display:flex;gap:10px;">
+            <input id="chatInput" type="text" class="form-control" placeholder="Ask me anything about Kerala..." style="border-radius:99px;padding:12px 20px;"/>
+            <button onclick="sendChat()" class="btn btn-primary" style="padding:12px 20px;border-radius:99px;flex-shrink:0;">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXPERIENCES ══ -->
+<section class="section" id="experiences">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="section-tag reveal" style="justify-content:center;">🎯 What Kerala Offers</div>
+      <h2 class="section-title reveal">Unforgettable <span class="gradient-text">Kerala Experiences</span></h2>
+      <p class="section-subtitle reveal" style="margin:0 auto;">Kerala has something magical for every kind of traveller.</p>
+    </div>
+    <div class="exp-grid">
+      <div class="exp-card exp-card-1 glass reveal">
+        <span class="exp-icon">🚤</span>
+        <h3>Houseboat Cruises</h3>
+        <p>Glide through emerald backwaters on traditional kettuvallam houseboats with gourmet Kerala meals.</p>
+      </div>
+      <div class="exp-card exp-card-2 glass reveal">
+        <span class="exp-icon">🐘</span>
+        <h3>Wildlife Safaris</h3>
+        <p>Spot elephants, tigers and rare birds in Periyar, Wayanad and Silent Valley national parks.</p>
+      </div>
+      <div class="exp-card exp-card-3 glass reveal">
+        <span class="exp-icon">🧖</span>
+        <h3>Ayurvedic Wellness</h3>
+        <p>Rejuvenate with authentic Kerala Ayurveda treatments and yoga retreats by serene backwaters.</p>
+      </div>
+      <div class="exp-card exp-card-4 glass reveal">
+        <span class="exp-icon">🎭</span>
+        <h3>Cultural Festivals</h3>
+        <p>Witness Thrissur Pooram, Kathakali dance, Onam celebrations and the Snake Boat Race.</p>
+      </div>
+      <div class="exp-card exp-card-1 glass reveal">
+        <span class="exp-icon">🏄</span>
+        <h3>Beach Activities</h3>
+        <p>Surf, kayak and snorkel at Kovalam, Varkala, Marari and Bekal beaches along the Arabian Sea.</p>
+      </div>
+      <div class="exp-card exp-card-2 glass reveal">
+        <span class="exp-icon">🍛</span>
+        <h3>Kerala Cuisine</h3>
+        <p>Savour traditional Sadhya, fresh seafood curries, appam with stew and toddy with spicy snacks.</p>
+      </div>
+      <div class="exp-card exp-card-3 glass reveal">
+        <span class="exp-icon">⛵</span>
+        <h3>Fishing Villages</h3>
+        <p>Meet local fishermen, watch Chinese fishing nets at dawn and enjoy fresh catch meals at Fort Kochi.</p>
+      </div>
+      <div class="exp-card exp-card-4 glass reveal">
+        <span class="exp-icon">🌄</span>
+        <h3>Trekking & Camping</h3>
+        <p>Trek through Meesapulimala, Chembra Peak and Agasthyarkoodam in the Western Ghats.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ WHY KERALA ══ -->
+<section class="section why-section">
+  <div class="container">
+    <div class="why-grid">
+      <div class="why-img-wrap reveal-left">
+        <div class="why-img-main">
+          <img src="images/thekkady.png" alt="Thekkady Wildlife"/>
+        </div>
+        <div class="why-img-float">
+          <img src="images/thrissur.png" alt="Thrissur Pooram" style="border-radius:var(--radius-md);"/>
+        </div>
+        <div class="why-badge-float glass">
+          <span class="num">30+</span>
+          Years of Tourism Excellence
+        </div>
+      </div>
+      <div class="reveal-right">
+        <div class="section-tag">🌟 Why Choose Kerala</div>
+        <h2 class="section-title">The Ultimate <span class="gradient-text-2">Tropical Paradise</span></h2>
+        <p style="color:var(--clr-muted);margin-bottom:36px;font-size:0.95rem;line-height:1.8;">Kerala is consistently ranked among the world's top travel destinations. With its unique blend of natural wonders, rich culture, world-class Ayurveda, and warm hospitality, Kerala offers an experience unlike any other.</p>
+
+        <div class="feature-item">
+          <div class="feature-icon" style="background:rgba(255,209,102,0.1);border-color:rgba(255,209,102,0.2);color:var(--clr-gold);"><i class="fa-solid fa-trophy"></i></div>
+          <div><h4>UNESCO World Heritage Sites</h4><p>Western Ghats, spice routes and colonial heritage recognized globally.</p></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon" style="background:rgba(0,206,201,0.1);border-color:rgba(0,206,201,0.2);color:var(--clr-teal);"><i class="fa-solid fa-leaf"></i></div>
+          <div><h4>Eco-Friendly Tourism</h4><p>Kerala leads India in sustainable and responsible travel practices.</p></div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon" style="background:rgba(255,107,107,0.1);border-color:rgba(255,107,107,0.2);color:var(--clr-coral);"><i class="fa-solid fa-heart"></i></div>
+          <div><h4>Highest Literacy & Safety</h4><p>Kerala is the safest state in India — ideal for solo, couple and family trips.</p></div>
+        </div>
+        <a href="register.html" class="btn btn-gold btn-lg" style="margin-top:12px;">
+          <i class="fa-solid fa-rocket"></i> Start Your Kerala Journey
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<section class="section stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div style="text-align:center;" class="reveal">
+        <div class="stat-value" data-target="50">0</div>
+        <div>+ Destinations Covered</div>
+        <div class="stat-label">Across all districts of Kerala</div>
+      </div>
+      <div style="text-align:center;" class="reveal">
+        <div class="stat-value" data-target="12000">0</div>
+        <div>+ Happy Travellers</div>
+        <div class="stat-label">Planned trips with us</div>
+      </div>
+      <div style="text-align:center;" class="reveal">
+        <div class="stat-value" data-target="98">0</div>
+        <div>% Satisfaction Rate</div>
+        <div class="stat-label">Verified traveller reviews</div>
+      </div>
+      <div style="text-align:center;" class="reveal">
+        <div class="stat-value" data-target="24">0</div>
+        <div>/7 AI Support</div>
+        <div class="stat-label">Always here to help</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ TESTIMONIALS ══ -->
+<section class="section" id="testimonials">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:56px;">
+      <div class="section-tag reveal" style="justify-content:center;">💬 Traveller Stories</div>
+      <h2 class="section-title reveal">What Our <span class="gradient-text">Travellers Say</span></h2>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card glass reveal">
+        <div class="testi-quote">❝</div>
+        <p class="testi-text">KeralaTrips planned the most incredible 7-day journey through the backwaters and Munnar. Every detail was perfect — the houseboats, the food, the timings. A trip of a lifetime!</p>
+        <div class="testi-author">
+          <div class="testi-avatar">R</div>
+          <div>
+            <div class="testi-name">Rahul Sharma</div>
+            <div class="testi-role">Delhi · Family Trip</div>
+          </div>
+          <div class="stars" style="margin-left:auto;">★★★★★</div>
+        </div>
+      </div>
+      <div class="testi-card glass reveal">
+        <div class="testi-quote">❝</div>
+        <p class="testi-text">The AI planner is absolutely brilliant! It understood exactly what I wanted — a mix of beaches and culture. Varkala and Fort Kochi were magical. Already planning my return trip!</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--clr-gold),var(--clr-gold2));">P</div>
+          <div>
+            <div class="testi-name">Priya Nair</div>
+            <div class="testi-role">Bangalore · Solo Travel</div>
+          </div>
+          <div class="stars" style="margin-left:auto;">★★★★★</div>
+        </div>
+      </div>
+      <div class="testi-card glass reveal">
+        <div class="testi-quote">❝</div>
+        <p class="testi-text">Wayanad was an absolute dream — the mist, the elephants, the tribal villages. KeralaTrips found us a stunning eco-resort that was off the beaten path. Highly recommended!</p>
+        <div class="testi-author">
+          <div class="testi-avatar" style="background:linear-gradient(135deg,var(--clr-teal),var(--clr-em));">A</div>
+          <div>
+            <div class="testi-name">Alex Thompson</div>
+            <div class="testi-role">London · Adventure Trip</div>
+          </div>
+          <div class="stars" style="margin-left:auto;">★★★★★</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section" style="background:var(--clr-bg2);" id="contact">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-tag reveal" style="justify-content:center;">🚀 Ready to Go?</div>
+    <h2 class="cta-title reveal">Begin Your <span class="gradient-text">Kerala Adventure</span> Today</h2>
+    <p class="cta-sub reveal">Join thousands of travellers who discovered Kerala's magic with our AI-powered trip planner. Free to start. No credit card required.</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;" class="reveal">
+      <a href="register.html" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-user-plus"></i> Create Free Account
+      </a>
+      <a href="destinations.html" class="btn btn-outline btn-lg">
+        <i class="fa-solid fa-compass"></i> Browse Destinations
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer" id="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand footer-col">
+        <a href="index.html" class="nav-logo" style="margin-bottom:0;">
+          <div class="logo-icon">🌴</div>
+          <span>Kerala<span class="gradient-text">Trips</span></span>
+        </a>
+        <p>Your intelligent Kerala travel companion. Plan, discover, and experience God's Own Country like never before.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn">📘</a>
+          <a href="#" class="social-btn">📸</a>
+          <a href="#" class="social-btn">🐦</a>
+          <a href="#" class="social-btn">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Destinations</h4>
+        <ul>
+          <li><a href="destinations.html">Munnar</a></li>
+          <li><a href="destinations.html">Alleppey</a></li>
+          <li><a href="destinations.html">Thekkady</a></li>
+          <li><a href="destinations.html">Wayanad</a></li>
+          <li><a href="destinations.html">Fort Kochi</a></li>
+          <li><a href="destinations.html">Varkala</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="plan-trip.html">AI Trip Planner</a></li>
+          <li><a href="#">Hotel Booking</a></li>
+          <li><a href="#">Tour Packages</a></li>
+          <li><a href="#">Travel Guide</a></li>
+          <li><a href="#">Ayurveda Tours</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="register.html">Sign Up Free</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 KeralaTrips. Made with ❤️ for Kerala</div>
+      <div>🌴 God's Own Country · Kerala, India</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ── Particle Network AI Animation ──
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [], mouse = {x:0,y:0};
+
+function resize(){
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+
+class Particle {
+  constructor(){
+    this.reset();
+  }
+  reset(){
+    this.x = Math.random()*W;
+    this.y = Math.random()*H;
+    this.vx = (Math.random()-0.5)*0.5;
+    this.vy = (Math.random()-0.5)*0.5;
+    this.r = Math.random()*2+0.5;
+    this.alpha = Math.random()*0.6+0.2;
+    this.color = ['#00e5a0','#00cec9','#ffd166','#ffffff'][Math.floor(Math.random()*4)];
+  }
+  update(){
+    this.x += this.vx; this.y += this.vy;
+    const dx=this.x-mouse.x, dy=this.y-mouse.y, dist=Math.sqrt(dx*dx+dy*dy);
+    if(dist<100){this.x+=dx/dist*1.5;this.y+=dy/dist*1.5;}
+    if(this.x<0||this.x>W||this.y<0||this.y>H) this.reset();
+  }
+  draw(){
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.r,0,Math.PI*2);
+    ctx.fillStyle=this.color;
+    ctx.globalAlpha=this.alpha;
+    ctx.fill();
+    ctx.globalAlpha=1;
+  }
+}
+
+function initParticles(){
+  particles=[];
+  const count = Math.min(120, Math.floor(W*H/8000));
+  for(let i=0;i<count;i++) particles.push(new Particle());
+}
+
+function drawConnections(){
+  const maxDist=120;
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x;
+      const dy=particles[i].y-particles[j].y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+      if(dist<maxDist){
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x,particles[i].y);
+        ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle='rgba(0,229,160,'+(0.15*(1-dist/maxDist))+')';
+        ctx.lineWidth=0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate(){
+  ctx.clearRect(0,0,W,H);
+  drawConnections();
+  particles.forEach(p=>{p.update();p.draw();});
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize',()=>{resize();initParticles();});
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  mouse.x=e.clientX-r.left;
+  mouse.y=e.clientY-r.top;
+});
+resize(); initParticles(); animate();
+
+// ── Navbar scroll ──
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
+});
+
+// ── Scroll Reveal ──
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // Number counter
+      const sv=e.target.querySelector('.stat-value[data-target]');
+      if(sv) animateCounter(sv);
+    }
+  });
+},{threshold:0.15});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>{
+  el.style.transitionDelay = (Array.from(el.parentElement.children).indexOf(el)*0.1)+'s';
+  observer.observe(el);
+});
+
+// ── Counter animation ──
+function animateCounter(el){
+  const target=+el.dataset.target;
+  const duration=2000; const step=duration/60;
+  let current=0;
+  const timer=setInterval(()=>{
+    current+=target/60;
+    if(current>=target){current=target;clearInterval(timer);}
+    el.textContent=Math.floor(current).toLocaleString();
+  },step);
+}
+
+// ── AI Chat simulation ──
+const replies=[
+  "Great! I recommend starting in Kochi for 1 day, then Munnar for 2 days, and ending with backwaters in Alleppey!",
+  "Kerala is beautiful year-round! December to March is peak season with perfect weather.",
+  "For a family trip, I suggest Thekkady wildlife, Munnar tea estates, and a houseboat in Kumarakom.",
+  "Budget tip: Offseason (June–September) offers 40% lower rates and stunning monsoon scenery!",
+  "I've curated 5 heritage homestays in Fort Kochi that you'll absolutely love! Shall I share details?"
+];
+let replyIndex=0;
+function sendChat(){
+  const input=document.getElementById('chatInput');
+  const container=document.getElementById('chatContainer');
+  if(!input.value.trim()) return;
+  const userMsg=document.createElement('div');
+  userMsg.className='ai-msg user';
+  userMsg.textContent=input.value;
+  container.appendChild(userMsg);
+  input.value='';
+  const typing=document.createElement('div');
+  typing.className='ai-msg bot';
+  typing.innerHTML='<div class="ai-typing"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
+  container.appendChild(typing);
+  container.scrollTop=container.scrollHeight;
+  setTimeout(()=>{
+    typing.innerHTML=replies[replyIndex%replies.length];
+    replyIndex++;
+    container.scrollTop=container.scrollHeight;
+  },1200);
+}
+document.getElementById('chatInput').addEventListener('keypress',e=>{if(e.key==='Enter')sendChat();});
+</script>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Trip Planner — Plan Your Kerala Trip | KeralaTrips</title>
+  <meta name="description" content="Use our AI-powered trip planner to create the perfect Kerala itinerary. Customize your destinations, duration, budget and travel style."/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .planner-hero{background:var(--clr-bg2);padding:120px 0 60px;position:relative;overflow:hidden;}
+    .planner-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(0,229,160,0.08),transparent 70%);}
+    .planner-grid{display:grid;grid-template-columns:380px 1fr;gap:32px;align-items:start;}
+    .planner-sidebar{border-radius:var(--radius-xl);padding:32px;position:sticky;top:100px;}
+    .planner-section{font-size:0.8rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--clr-em);margin:24px 0 14px;padding-top:24px;border-top:1px solid var(--clr-border);}
+    .planner-section:first-child{margin-top:0;padding-top:0;border-top:none;}
+    .dest-pill{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);margin-bottom:8px;cursor:pointer;transition:var(--transition);}
+    .dest-pill:hover{background:rgba(0,229,160,0.14);}
+    .dest-pill input[type=checkbox]{accent-color:var(--clr-em);width:16px;height:16px;}
+    .dest-pill-icon{font-size:1.1rem;}
+    .dest-pill-info{flex:1;}
+    .dest-pill-name{font-size:0.875rem;font-weight:600;}
+    .dest-pill-days{font-size:0.75rem;color:var(--clr-muted);}
+    .slider-wrap{padding:0 4px;}
+    .range-slider{width:100%;-webkit-appearance:none;height:4px;border-radius:99px;background:linear-gradient(to right,var(--clr-em) var(--slider-pct,50%),rgba(255,255,255,0.1) var(--slider-pct,50%));outline:none;cursor:pointer;}
+    .range-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--clr-em);cursor:pointer;box-shadow:0 0 10px rgba(0,229,160,0.4);}
+    .range-display{display:flex;justify-content:space-between;font-size:0.8rem;color:var(--clr-muted);margin-top:8px;}
+    .range-val{font-weight:700;color:var(--clr-em);font-size:1rem;}
+    .travel-type{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+    .travel-type-btn{border:1px solid var(--clr-border);border-radius:10px;padding:10px;text-align:center;cursor:pointer;transition:var(--transition);font-size:0.8rem;color:var(--clr-muted);}
+    .travel-type-btn:hover,.travel-type-btn.active{border-color:var(--clr-em);color:var(--clr-em);background:rgba(0,229,160,0.08);}
+    .travel-type-btn .tt-icon{font-size:1.4rem;display:block;margin-bottom:4px;}
+    .generate-btn{width:100%;padding:18px;border-radius:var(--radius-md);background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));color:#030d12;font-size:1rem;font-weight:700;border:none;cursor:pointer;transition:var(--transition);margin-top:24px;display:flex;align-items:center;justify-content:center;gap:10px;}
+    .generate-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,229,160,0.4);}
+    .generate-btn:disabled{opacity:0.6;cursor:not-allowed;transform:none;}
+    /* Itinerary Output */
+    .itinerary-output{border-radius:var(--radius-xl);overflow:hidden;}
+    .output-placeholder{padding:80px 40px;text-align:center;border:2px dashed rgba(0,229,160,0.2);border-radius:var(--radius-xl);background:rgba(0,229,160,0.02);}
+    .day-card{border-radius:var(--radius-lg);margin-bottom:20px;overflow:hidden;transition:var(--transition);}
+    .day-card:hover{transform:translateX(4px);}
+    .day-header{display:flex;align-items:center;gap:16px;padding:20px 24px;background:rgba(0,229,160,0.06);border-bottom:1px solid rgba(0,229,160,0.1);cursor:pointer;}
+    .day-num{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));display:grid;place-items:center;font-weight:900;font-size:1rem;color:#030d12;flex-shrink:0;}
+    .day-title{font-weight:700;font-size:1rem;}
+    .day-sub{font-size:0.8rem;color:var(--clr-muted);}
+    .day-body{padding:20px 24px;}
+    .activity{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .activity:last-child{border-bottom:none;}
+    .act-time{font-size:0.75rem;font-weight:700;color:var(--clr-em);min-width:60px;padding-top:2px;}
+    .act-dot{width:10px;height:10px;border-radius:50%;background:var(--clr-em);margin-top:5px;flex-shrink:0;box-shadow:0 0 8px rgba(0,229,160,0.6);}
+    .act-info h4{font-size:0.9rem;font-weight:600;margin-bottom:3px;}
+    .act-info p{font-size:0.8rem;color:var(--clr-muted);}
+    .act-icon{font-size:1.2rem;flex-shrink:0;margin-top:2px;}
+    .itinerary-header{padding:28px;background:linear-gradient(135deg,rgba(0,229,160,0.08),rgba(0,206,201,0.05));border:1px solid rgba(0,229,160,0.15);border-radius:var(--radius-xl);margin-bottom:24px;}
+    .summary-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+    .summary-chip{font-size:0.78rem;padding:4px 12px;border-radius:99px;background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.2);color:var(--clr-em);}
+    .loading-dots{display:flex;gap:8px;justify-content:center;margin:24px 0;}
+    .loading-dot{width:12px;height:12px;border-radius:50%;background:var(--clr-em);animation:float 1s ease-in-out infinite;}
+    .loading-dot:nth-child(2){animation-delay:0.2s;}
+    .loading-dot:nth-child(3){animation-delay:0.4s;}
+    @media(max-width:1024px){.planner-grid{grid-template-columns:1fr;}.planner-sidebar{position:relative;top:auto;}}
+  </style>
+</head>
+<body>
+
+<nav class="navbar scrolled" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🌴</div>
+        <span>Kerala<span class="gradient-text">Trips</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="destinations.html">Destinations</a></li>
+        <li><a href="plan-trip.html" class="active">Plan Trip</a></li>
+        <li><a href="index.html#experiences">Experiences</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">Sign In</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="planner-hero">
+  <div class="orb orb-1" style="opacity:0.5;"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div class="section-tag">🤖 AI-Powered</div>
+    <h1 style="font-size:clamp(2rem,4vw,3.5rem);font-weight:900;margin-bottom:16px;">
+      Plan Your Perfect <span class="gradient-text">Kerala Trip</span>
+    </h1>
+    <p style="color:var(--clr-muted);max-width:600px;font-size:1.05rem;">
+      Select your destinations, travel dates and preferences — our AI will generate a detailed day-by-day itinerary tailored just for you.
+    </p>
+  </div>
+</section>
+
+<!-- Planner -->
+<section class="section" style="padding-top:48px;">
+  <div class="container">
+    <div class="planner-grid">
+
+      <!-- SIDEBAR — Configuration -->
+      <div class="planner-sidebar glass">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+          <div style="width:36px;height:36px;background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));border-radius:8px;display:grid;place-items:center;font-size:1rem;">🤖</div>
+          <div>
+            <div style="font-weight:700;font-size:0.95rem;">Kerala AI Planner</div>
+            <div style="font-size:0.75rem;color:var(--clr-em);">● Active</div>
+          </div>
+        </div>
+
+        <div class="planner-section">📅 Travel Dates</div>
+        <div class="form-group" style="margin-bottom:12px;">
+          <label class="form-label">Start Date</label>
+          <div class="form-icon-wrap">
+            <i class="fa-solid fa-calendar form-icon"></i>
+            <input type="date" id="startDate" class="form-control"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">End Date</label>
+          <div class="form-icon-wrap">
+            <i class="fa-solid fa-calendar-check form-icon"></i>
+            <input type="date" id="endDate" class="form-control"/>
+          </div>
+        </div>
+
+        <div class="planner-section">📍 Choose Destinations</div>
+        <label class="dest-pill"><input type="checkbox" id="d-alleppey" checked/><span class="dest-pill-icon">🚤</span><div class="dest-pill-info"><div class="dest-pill-name">Alleppey Backwaters</div><div class="dest-pill-days">Best: 2 days</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-munnar" checked/><span class="dest-pill-icon">🏔️</span><div class="dest-pill-info"><div class="dest-pill-name">Munnar</div><div class="dest-pill-days">Best: 2 days</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-thekkady"/><span class="dest-pill-icon">🐘</span><div class="dest-pill-info"><div class="dest-pill-name">Thekkady</div><div class="dest-pill-days">Best: 1–2 days</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-kochi" checked/><span class="dest-pill-icon">🏛️</span><div class="dest-pill-info"><div class="dest-pill-name">Fort Kochi</div><div class="dest-pill-days">Best: 1 day</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-kovalam"/><span class="dest-pill-icon">🏖️</span><div class="dest-pill-info"><div class="dest-pill-name">Kovalam Beach</div><div class="dest-pill-days">Best: 2 days</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-wayanad"/><span class="dest-pill-icon">🌿</span><div class="dest-pill-info"><div class="dest-pill-name">Wayanad</div><div class="dest-pill-days">Best: 2 days</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-varkala"/><span class="dest-pill-icon">🌊</span><div class="dest-pill-info"><div class="dest-pill-name">Varkala</div><div class="dest-pill-days">Best: 1–2 days</div></div></label>
+        <label class="dest-pill"><input type="checkbox" id="d-kumarakom"/><span class="dest-pill-icon">🏡</span><div class="dest-pill-info"><div class="dest-pill-name">Kumarakom</div><div class="dest-pill-days">Best: 1–2 days</div></div></label>
+
+        <div class="planner-section">👥 Travellers & Style</div>
+        <div style="margin-bottom:16px;">
+          <label class="form-label">Number of Travellers</label>
+          <div style="display:flex;align-items:center;gap:16px;">
+            <button onclick="changeTravellers(-1)" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--clr-border);background:none;color:var(--clr-text);font-size:1.2rem;cursor:pointer;transition:var(--transition);" onmouseover="this.style.borderColor='var(--clr-em)'" onmouseout="this.style.borderColor='var(--clr-border)'">-</button>
+            <div style="font-size:1.4rem;font-weight:800;font-family:var(--font-mono);color:var(--clr-em);min-width:30px;text-align:center;" id="travellerCount">2</div>
+            <button onclick="changeTravellers(1)" style="width:36px;height:36px;border-radius:8px;border:1px solid var(--clr-border);background:none;color:var(--clr-text);font-size:1.2rem;cursor:pointer;transition:var(--transition);" onmouseover="this.style.borderColor='var(--clr-em)'" onmouseout="this.style.borderColor='var(--clr-border)'">+</button>
+          </div>
+        </div>
+        <div class="travel-type">
+          <div class="travel-type-btn active" onclick="selectTravelType(this)"><span class="tt-icon">💑</span>Couple</div>
+          <div class="travel-type-btn" onclick="selectTravelType(this)"><span class="tt-icon">👨‍👩‍👧‍👦</span>Family</div>
+          <div class="travel-type-btn" onclick="selectTravelType(this)"><span class="tt-icon">👤</span>Solo</div>
+          <div class="travel-type-btn" onclick="selectTravelType(this)"><span class="tt-icon">👥</span>Group</div>
+        </div>
+
+        <div class="planner-section">💰 Daily Budget (₹ per person)</div>
+        <div class="slider-wrap">
+          <input type="range" class="range-slider" id="budgetSlider" min="1000" max="20000" value="5000" step="500" oninput="updateBudget(this.value)"/>
+          <div class="range-display">
+            <span>₹1,000</span>
+            <div class="range-val" id="budgetVal">₹5,000/day</div>
+            <span>₹20,000</span>
+          </div>
+        </div>
+
+        <div class="planner-section">🌟 Travel Interests</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+          <button class="filter-tab active" style="font-size:0.75rem;padding:5px 12px;" onclick="this.classList.toggle('active')">🚤 Backwaters</button>
+          <button class="filter-tab active" style="font-size:0.75rem;padding:5px 12px;" onclick="this.classList.toggle('active')">🍛 Food</button>
+          <button class="filter-tab" style="font-size:0.75rem;padding:5px 12px;" onclick="this.classList.toggle('active')">🧖 Ayurveda</button>
+          <button class="filter-tab" style="font-size:0.75rem;padding:5px 12px;" onclick="this.classList.toggle('active')">🐘 Wildlife</button>
+          <button class="filter-tab active" style="font-size:0.75rem;padding:5px 12px;" onclick="this.classList.toggle('active')">🏛️ Heritage</button>
+          <button class="filter-tab" style="font-size:0.75px;padding:5px 12px;" onclick="this.classList.toggle('active')">🎭 Culture</button>
+        </div>
+
+        <button class="generate-btn" id="generateBtn" onclick="generateItinerary()">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          Generate My Itinerary
+        </button>
+      </div>
+
+      <!-- OUTPUT PANEL -->
+      <div id="outputPanel">
+        <div class="output-placeholder glass" id="placeholder">
+          <div style="font-size:4rem;margin-bottom:20px;animation:float 3s ease-in-out infinite;">🗺️</div>
+          <h3 style="font-size:1.4rem;font-weight:700;margin-bottom:12px;">Your Kerala itinerary awaits</h3>
+          <p style="color:var(--clr-muted);max-width:380px;margin:0 auto 24px;">Configure your preferences on the left, then click <strong style="color:var(--clr-em);">Generate My Itinerary</strong> to get your personalized day-by-day Kerala trip plan.</p>
+          <div style="display:flex;gap:20px;justify-content:center;flex-wrap:wrap;">
+            <div style="text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:var(--clr-em);">30s</div>
+              <div style="font-size:0.8rem;color:var(--clr-muted);">Generation time</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:var(--clr-gold);">AI</div>
+              <div style="font-size:0.8rem;color:var(--clr-muted);">Powered planning</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:1.8rem;font-weight:800;color:var(--clr-teal);">100%</div>
+              <div style="font-size:0.8rem;color:var(--clr-muted);">Personalized</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="loadingPanel" style="display:none;text-align:center;padding:60px 40px;">
+          <div style="font-size:3rem;margin-bottom:16px;animation:spin-slow 2s linear infinite;">🤖</div>
+          <h3 style="font-weight:700;margin-bottom:8px;">AI is crafting your itinerary...</h3>
+          <p style="color:var(--clr-muted);margin-bottom:24px;">Analyzing destinations, calculating travel times, finding the best experiences</p>
+          <div class="loading-dots">
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+            <div class="loading-dot"></div>
+          </div>
+          <div id="loadingSteps" style="font-size:0.85rem;color:var(--clr-muted);"></div>
+        </div>
+
+        <div id="itineraryResult" style="display:none;">
+          <!-- Generated dynamically -->
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand footer-col">
+        <a href="index.html" class="nav-logo" style="margin-bottom:0;"><div class="logo-icon">🌴</div><span>Kerala<span class="gradient-text">Trips</span></span></a>
+        <p>Your intelligent Kerala travel companion.</p>
+        <div class="footer-socials"><a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🐦</a></div>
+      </div>
+      <div class="footer-col"><h4>Quick Links</h4><ul><li><a href="index.html">Home</a></li><li><a href="destinations.html">Destinations</a></li><li><a href="login.html">Login</a></li><li><a href="register.html">Register</a></li></ul></div>
+      <div class="footer-col"><h4>Top Places</h4><ul><li><a href="#">Alleppey</a></li><li><a href="#">Munnar</a></li><li><a href="#">Fort Kochi</a></li><li><a href="#">Wayanad</a></li></ul></div>
+      <div class="footer-col"><h4>Contact</h4><ul><li><a href="#">📧 hello@keralatrips.in</a></li><li><a href="#">📍 Kochi, Kerala</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><div>© 2026 KeralaTrips</div><div>🌴 God's Own Country</div></div>
+  </div>
+</footer>
+
+<script>
+let travellers = 2;
+
+function changeTravellers(delta) {
+  travellers = Math.max(1, Math.min(20, travellers + delta));
+  document.getElementById('travellerCount').textContent = travellers;
+}
+function selectTravelType(el) {
+  document.querySelectorAll('.travel-type-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+function updateBudget(val) {
+  document.getElementById('budgetVal').textContent = '₹' + parseInt(val).toLocaleString() + '/day';
+  const pct = ((val - 1000) / (20000 - 1000)) * 100;
+  document.getElementById('budgetSlider').style.setProperty('--slider-pct', pct + '%');
+}
+
+// Set default dates
+const today = new Date();
+const nextWeek = new Date(today); nextWeek.setDate(today.getDate() + 7);
+const twoWeeks = new Date(today); twoWeeks.setDate(today.getDate() + 14);
+document.getElementById('startDate').value = nextWeek.toISOString().split('T')[0];
+document.getElementById('endDate').value = twoWeeks.toISOString().split('T')[0];
+
+const loadingStepMessages = [
+  '🔍 Analyzing your selected destinations...',
+  '🗺️ Calculating optimal travel routes...',
+  '🏨 Curating accommodation options...',
+  '🍴 Finding the best local restaurants...',
+  '🎯 Personalizing activities to your interests...',
+  '✨ Finalizing your perfect itinerary...'
+];
+
+const itineraryData = [
+  {
+    day: 1, location: 'Fort Kochi', icon: '🏛️',
+    subtitle: 'Arrive in Kochi · Heritage & Culture',
+    activities: [
+      {time:'09:00', icon:'✈️', name:'Arrive at Kochi Airport / Train Station', desc:'Check-in at your heritage boutique hotel in Fort Kochi'},
+      {time:'11:00', icon:'🚶', name:'Fort Kochi Heritage Walk', desc:'Explore colonial architecture, St. Francis Church & Dutch Cemetery'},
+      {time:'13:00', icon:'🍛', name:'Lunch at Kashi Art Café', desc:'Try Kerala prawn curry and appam in an art gallery setting'},
+      {time:'15:00', icon:'🎣', name:'Chinese Fishing Nets at Vasco Da Gama Square', desc:'Watch traditional fishing nets being operated at the seafront'},
+      {time:'17:00', icon:'🛍️', name:'Spice Market & Mattancherry', desc:'Explore the Jewish Quarter and stock up on Kerala spices'},
+      {time:'19:00', icon:'🎭', name:'Kathakali Performance', desc:'Watch the classical Kathakali dance drama at Kerala Kathakali Centre'},
+    ]
+  },
+  {
+    day: 2, location: 'Kochi → Alleppey', icon: '🚤',
+    subtitle: 'Journey to the Backwaters',
+    activities: [
+      {time:'08:00', icon:'🌅', name:'Sunrise Breakfast', desc:'Enjoy Kerala puttu & kadala curry at your hotel'},
+      {time:'09:30', icon:'🚗', name:'Drive to Alleppey (1.5 hrs)', desc:'Scenic drive through coconut palms and paddy fields'},
+      {time:'12:00', icon:'⛵', name:'Board Your Houseboat', desc:'Check-in to your traditional kettuvallam houseboat on Vembanad Lake'},
+      {time:'13:00', icon:'🍜', name:'Lunch on the Houseboat', desc:'Fresh Kerala fish curry, rice, pappadam served on the deck'},
+      {time:'15:00', icon:'🚤', name:'Backwater Cruise', desc:'Cruise through narrow canals, watching village life and coconut groves'},
+      {time:'18:30', icon:'🌅', name:'Sunset on the Lake', desc:'Magical sunset over Vembanad Lake with cocktails on deck'},
+      {time:'20:00', icon:'🌙', name:'Overnight on Houseboat', desc:'Sleep under the stars on the tranquil backwaters'},
+    ]
+  },
+  {
+    day: 3, location: 'Alleppey → Munnar', icon: '🏔️',
+    subtitle: 'Hill Station Escape',
+    activities: [
+      {time:'07:00', icon:'🌄', name:'Early Morning Backwaters', desc:'Canoe through narrow channels with morning mist'},
+      {time:'09:00', icon:'🚌', name:'Depart for Munnar (3.5 hrs)', desc:'Winding mountain road through rubber and spice estates'},
+      {time:'13:00', icon:'🍃', name:'Arrive Munnar — Tea Museum', desc:'Learn about tea processing at the KDHP Tea Museum'},
+      {time:'15:00', icon:'🌿', name:'Tea Garden Walk', desc:'Guided walk through endless green tea plantations'},
+      {time:'17:00', icon:'🏞️', name:'Mattupetty Dam Viewpoint', desc:'Panoramic views over the dam and surrounding Shola forests'},
+      {time:'20:00', icon:'🍲', name:'Dinner & Night at Munnar', desc:'Kerala Sadhya dinner at a traditional restaurant'},
+    ]
+  },
+  {
+    day: 4, location: 'Munnar', icon: '⛰️',
+    subtitle: 'Western Ghats Adventure',
+    activities: [
+      {time:'06:30', icon:'🦌', name:'Eravikulam National Park', desc:'Spot Nilgiri Tahr and other wildlife at sunrise'},
+      {time:'10:00', icon:'💧', name:'Attukal Waterfalls', desc:'Trek to the beautiful Attukal falls through tea estates'},
+      {time:'13:00', icon:'🍛', name:'Local Lunch', desc:'Authentic Kerala meals (Sadhya) at Rapsy Restaurant'},
+      {time:'15:00', icon:'📸', name:'Echo Point & Kundala Lake', desc:'Stunning landscapes for photography'},
+      {time:'18:00', icon:'🌇', name:'Munnar Town Sunset', desc:'Explore local market and buy tea, spices, chocolate'},
+    ]
+  },
+  {
+    day: 5, location: 'Munnar → Kovalam', icon: '🏖️',
+    subtitle: 'Beach Finale',
+    activities: [
+      {time:'08:00', icon:'🚗', name:'Depart for Kovalam (5 hrs)', desc:'Scenic drive through Idukki and Thiruvananthapuram'},
+      {time:'14:00', icon:'🏖️', name:'Arrive Kovalam Beach', desc:'Check-in at beachfront resort, relax on Lighthouse Beach'},
+      {time:'16:00', icon:'🏄', name:'Water Sports', desc:'Surfing, parasailing and kayaking in the Arabian Sea'},
+      {time:'18:00', icon:'🌅', name:'Lighthouse Sunset', desc:'Climb the Vizhinjam Lighthouse for spectacular sunset views'},
+      {time:'20:00', icon:'🦞', name:'Seafood Dinner', desc:'Fresh lobster, prawn and fish thali at a beach shack restaurant'},
+    ]
+  },
+];
+
+function generateItinerary() {
+  const btn = document.getElementById('generateBtn');
+  btn.disabled = true;
+  document.getElementById('placeholder').style.display = 'none';
+  document.getElementById('loadingPanel').style.display = 'block';
+  document.getElementById('itineraryResult').style.display = 'none';
+
+  let stepIdx = 0;
+  const stepEl = document.getElementById('loadingSteps');
+  const stepInterval = setInterval(() => {
+    if(stepIdx < loadingStepMessages.length) {
+      stepEl.textContent = loadingStepMessages[stepIdx++];
+    } else {
+      clearInterval(stepInterval);
+    }
+  }, 500);
+
+  setTimeout(() => {
+    clearInterval(stepInterval);
+    document.getElementById('loadingPanel').style.display = 'none';
+    renderItinerary();
+    document.getElementById('itineraryResult').style.display = 'block';
+    btn.disabled = false;
+  }, 3500);
+}
+
+function renderItinerary() {
+  const result = document.getElementById('itineraryResult');
+  const budget = parseInt(document.getElementById('budgetSlider').value).toLocaleString();
+  const startDate = document.getElementById('startDate').value;
+  const endDate = document.getElementById('endDate').value;
+
+  let html = `
+  <div class="itinerary-header">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px;">
+      <div style="width:48px;height:48px;background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));border-radius:12px;display:grid;place-items:center;font-size:1.4rem;">🤖</div>
+      <div>
+        <div style="font-size:1.2rem;font-weight:800;">Your Kerala Adventure — 5 Days</div>
+        <div style="font-size:0.85rem;color:var(--clr-muted);">AI Generated · Personalized Itinerary</div>
+      </div>
+      <button onclick="window.print()" style="margin-left:auto;padding:8px 16px;border-radius:8px;border:1px solid var(--clr-border);background:none;color:var(--clr-text);cursor:pointer;font-size:0.8rem;transition:var(--transition);" onmouseover="this.style.borderColor='var(--clr-em)'" onmouseout="this.style.borderColor='var(--clr-border)'">🖨️ Print</button>
+    </div>
+    <div class="summary-chips">
+      <span class="summary-chip">📅 ${startDate} → ${endDate}</span>
+      <span class="summary-chip">👥 ${travellers} Travellers</span>
+      <span class="summary-chip">💰 ₹${budget}/person/day</span>
+      <span class="summary-chip">📍 4 Destinations</span>
+      <span class="summary-chip">🏨 Mixed Accommodations</span>
+      <span class="summary-chip">✅ AI Optimized</span>
+    </div>
+  </div>`;
+
+  itineraryData.forEach((day, idx) => {
+    html += `
+    <div class="day-card glass" style="animation:fadeUp 0.5s ease ${idx*0.1}s both;">
+      <div class="day-header" onclick="toggleDay('day${idx}')">
+        <div class="day-num">${day.day}</div>
+        <div style="flex:1;">
+          <div class="day-title">${day.icon} ${day.location}</div>
+          <div class="day-sub">${day.subtitle}</div>
+        </div>
+        <i class="fa-solid fa-chevron-down" style="color:var(--clr-muted);transition:transform 0.3s;" id="chevron${idx}"></i>
+      </div>
+      <div class="day-body" id="day${idx}">`;
+    day.activities.forEach(act => {
+      html += `
+        <div class="activity">
+          <div class="act-time">${act.time}</div>
+          <div class="act-dot"></div>
+          <div class="act-icon">${act.icon}</div>
+          <div class="act-info"><h4>${act.name}</h4><p>${act.desc}</p></div>
+        </div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  html += `
+  <div style="display:flex;gap:12px;margin-top:24px;flex-wrap:wrap;">
+    <a href="register.html" class="btn btn-primary btn-lg" style="flex:1;justify-content:center;"><i class="fa-solid fa-save"></i> Save This Itinerary</a>
+    <button onclick="generateItinerary()" class="btn btn-outline" style="flex:1;justify-content:center;"><i class="fa-solid fa-rotate"></i> Regenerate</button>
+  </div>`;
+
+  result.innerHTML = html;
+}
+
+function toggleDay(id) {
+  const body = document.getElementById(id);
+  const idx = id.replace('day','');
+  const chevron = document.getElementById('chevron'+idx);
+  if(body.style.display === 'none') {
+    body.style.display = 'block';
+    chevron.style.transform = 'rotate(0deg)';
+  } else {
+    body.style.display = 'none';
+    chevron.style.transform = 'rotate(-90deg)';
+  }
+}
+
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
+});
+
+// Initialize budget slider display
+updateBudget(5000);
+</script>
+</body>
+</html>

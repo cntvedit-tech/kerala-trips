@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kerala Destinations — Explore 20+ Tourist Places | KeralaTrips</title>
+  <meta name="description" content="Explore all popular Kerala tourist destinations — Munnar, Alleppey, Varkala, Thekkady, Wayanad, Fort Kochi, Kovalam, Kumarakom and more."/>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    .page-hero{position:relative;padding:160px 0 80px;overflow:hidden;background:var(--clr-bg2);border-bottom:1px solid var(--clr-border);}
+    .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 60% 50%,rgba(0,229,160,0.08) 0%,transparent 70%);}
+    .dest-full-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+    .dest-full-card{border-radius:var(--radius-xl);overflow:hidden;background:var(--clr-surface);border:1px solid var(--clr-border);transition:var(--transition);}
+    .dest-full-card:hover{transform:translateY(-8px);box-shadow:var(--shadow-card),0 0 40px rgba(0,229,160,0.1);border-color:rgba(0,229,160,0.3);}
+    .dest-full-img{height:260px;position:relative;overflow:hidden;}
+    .dest-full-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.7s;}
+    .dest-full-card:hover .dest-full-img img{transform:scale(1.08);}
+    .dest-full-img::after{content:'';position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(to top,rgba(3,13,18,0.8),transparent);}
+    .dest-full-body{padding:24px;}
+    .dest-full-cat{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--clr-em);margin-bottom:8px;}
+    .dest-full-name{font-size:1.35rem;font-weight:800;margin-bottom:8px;}
+    .dest-full-desc{font-size:0.875rem;color:var(--clr-muted);line-height:1.7;margin-bottom:16px;}
+    .dest-full-meta{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+    .dest-meta-chip{display:flex;align-items:center;gap:5px;font-size:0.78rem;color:var(--clr-muted);background:rgba(255,255,255,0.04);border:1px solid var(--clr-border);padding:4px 10px;border-radius:99px;}
+    .dest-highlights{margin-bottom:18px;}
+    .dest-highlights span{display:inline-block;font-size:0.75rem;padding:3px 10px;border-radius:99px;margin:3px;background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);color:var(--clr-em);}
+    .dest-footer{display:flex;justify-content:space-between;align-items:center;}
+    .dest-price{font-size:0.8rem;color:var(--clr-muted);}
+    .dest-price strong{color:var(--clr-em);font-size:1.1rem;}
+    .dest-btn{padding:8px 18px;border-radius:99px;background:linear-gradient(135deg,var(--clr-em),var(--clr-teal));color:#030d12;font-size:0.8rem;font-weight:700;border:none;cursor:pointer;transition:var(--transition);}
+    .dest-btn:hover{transform:scale(1.05);box-shadow:0 4px 20px rgba(0,229,160,0.4);}
+    .cat-icon{position:absolute;top:16px;left:16px;z-index:2;width:36px;height:36px;border-radius:8px;display:grid;place-items:center;font-size:1rem;backdrop-filter:blur(10px);}
+    .map-section{background:var(--clr-bg2);padding:80px 0;}
+    .kerala-map{border-radius:var(--radius-xl);overflow:hidden;border:1px solid var(--clr-border);height:500px;position:relative;display:flex;align-items:center;justify-content:center;}
+    .map-placeholder{text-align:center;}
+    @media(max-width:1024px){.dest-full-grid{grid-template-columns:repeat(2,1fr);}}
+    @media(max-width:640px){.dest-full-grid{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav class="navbar scrolled" id="navbar">
+  <div class="container">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">
+        <div class="logo-icon">🌴</div>
+        <span>Kerala<span class="gradient-text">Trips</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="destinations.html" class="active">Destinations</a></li>
+        <li><a href="plan-trip.html">Plan Trip</a></li>
+        <li><a href="index.html#experiences">Experiences</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="login.html" class="btn btn-outline">Sign In</a>
+        <a href="register.html" class="btn btn-primary">Get Started</a>
+        <button class="nav-toggle">☰</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ PAGE HERO ══ -->
+<section class="page-hero">
+  <div class="orb orb-1" style="opacity:0.6;"></div>
+  <div class="orb orb-3"></div>
+  <div class="container" style="position:relative;z-index:1;">
+    <div style="max-width:700px;">
+      <div class="section-tag">🗺️ Explore Kerala</div>
+      <h1 style="font-size:clamp(2.5rem,5vw,4rem);font-weight:900;margin-bottom:20px;">
+        Discover <span class="gradient-text">20+ Breathtaking</span><br/>Kerala Destinations
+      </h1>
+      <p style="font-size:1.1rem;color:var(--clr-muted);max-width:580px;">
+        From misty hill stations to pristine beaches, emerald backwaters to ancient heritage — explore every corner of God's Own Country.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DESTINATIONS ══ -->
+<section class="section" id="places">
+  <div class="container">
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs" id="filterTabs">
+      <button class="filter-tab active" data-filter="all">🌐 All Places</button>
+      <button class="filter-tab" data-filter="backwaters">🚤 Backwaters</button>
+      <button class="filter-tab" data-filter="hills">🏔️ Hill Stations</button>
+      <button class="filter-tab" data-filter="beach">🏖️ Beaches</button>
+      <button class="filter-tab" data-filter="wildlife">🐘 Wildlife</button>
+      <button class="filter-tab" data-filter="heritage">🏛️ Heritage</button>
+      <button class="filter-tab" data-filter="waterfalls">💧 Waterfalls</button>
+    </div>
+
+    <div class="dest-full-grid" id="destGrid">
+
+      <!-- 1. Alleppey -->
+      <div class="dest-full-card reveal" data-cat="backwaters">
+        <div class="dest-full-img">
+          <img src="images/alleppey.png" alt="Alleppey Backwaters"/>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🚤</div>
+          <span class="badge badge-hot" style="top:12px;">🔥 #1 Most Visited</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Backwaters · Alappuzha District</div>
+          <div class="dest-full-name">Alleppey Backwaters</div>
+          <p class="dest-full-desc">Known as the "Venice of the East," Alleppey's labyrinthine network of canals, lakes and lagoons is best explored on a traditional houseboat. The sunset over the backwaters is absolutely magical.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.9</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–4 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Oct–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🏡 Houseboat Stay</span><span>🐟 Fishing Villages</span><span>🌅 Sunset Cruise</span><span>🌊 Vembanad Lake</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹3,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Munnar -->
+      <div class="dest-full-card reveal" data-cat="hills">
+        <div class="dest-full-img">
+          <img src="images/munnar.png" alt="Munnar Tea Gardens"/>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🏔️</div>
+          <span class="badge badge-trending" style="top:12px;">📈 Trending</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Hill Station · Idukki District</div>
+          <div class="dest-full-name">Munnar</div>
+          <p class="dest-full-desc">Perched at 1600m in the Western Ghats, Munnar is a paradise of rolling tea estates, misty mountains and rare flora. Home to Eravikulam National Park where the endangered Nilgiri Tahr roams free.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Sep–May</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🍃 Tea Gardens</span><span>🦌 Eravikulam NP</span><span>⛰️ Anamudi Peak</span><span>💧 Attukal Falls</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,800/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Varkala -->
+      <div class="dest-full-card reveal" data-cat="beach">
+        <div class="dest-full-img">
+          <img src="images/varkala.png" alt="Varkala Cliff Beach"/>
+          <div class="cat-icon" style="background:rgba(255,107,107,0.2);">🏖️</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Beach · Thiruvananthapuram District</div>
+          <div class="dest-full-name">Varkala Beach</div>
+          <p class="dest-full-desc">Varkala is famous for its dramatic red laterite cliffs rising above the Arabian Sea, natural mineral springs and the sacred Janardhana Swami Temple. A perfect blend of spiritual and beach experience.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🌊 Cliff Beach</span><span>🏄 Surfing</span><span>🧘 Yoga</span><span>🛕 Temple</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,200/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Fort Kochi -->
+      <div class="dest-full-card reveal" data-cat="heritage">
+        <div class="dest-full-img">
+          <img src="images/fort_kochi.png" alt="Fort Kochi"/>
+          <div class="cat-icon" style="background:rgba(255,209,102,0.2);">🏛️</div>
+          <span class="badge badge-new" style="top:12px;">✨ Heritage Walk</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Heritage · Ernakulam District</div>
+          <div class="dest-full-name">Fort Kochi</div>
+          <p class="dest-full-desc">A living museum of colonial history, Fort Kochi blends Portuguese, Dutch and British heritage with its iconic Chinese fishing nets, spice markets, art galleries and the magnificent St. Francis Church.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Oct–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🎣 Chinese Nets</span><span>⛪ St. Francis Church</span><span>🎨 Art District</span><span>🌶️ Spice Market</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹3,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Thekkady / Periyar -->
+      <div class="dest-full-card reveal" data-cat="wildlife">
+        <div class="dest-full-img">
+          <img src="images/thekkady.png" alt="Thekkady Periyar Wildlife"/>
+          <div class="cat-icon" style="background:rgba(0,206,201,0.2);">🐘</div>
+          <span class="badge badge-hot" style="top:12px;">🐘 Wildlife</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Wildlife · Idukki District</div>
+          <div class="dest-full-name">Thekkady — Periyar</div>
+          <p class="dest-full-desc">Home to the Periyar Wildlife Sanctuary, Thekkady offers boat safaris on Periyar Lake where elephants, gaurs and tigers come to the water's edge. The surrounding spice plantations add incredible fragrance.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–June</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🚤 Boat Safari</span><span>🐅 Tiger Reserve</span><span>🌶️ Spice Plantation</span><span>🦜 Birdwatching</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Wayanad -->
+      <div class="dest-full-card reveal" data-cat="wildlife">
+        <div class="dest-full-img">
+          <img src="images/wayanad.png" alt="Wayanad Forest"/>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🌿</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Wildlife & Hills · Wayanad District</div>
+          <div class="dest-full-name">Wayanad</div>
+          <p class="dest-full-desc">Wayanad is a magical land of misty forests, tribal settlements, ancient caves and wildlife. Explore the Edakkal Caves with prehistoric carvings, trek to Chembra Peak and visit the Thirunelli Temple.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Sep–May</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🗿 Edakkal Caves</span><span>⛰️ Chembra Peak</span><span>🐘 Wildlife</span><span>☕ Coffee Estates</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,000/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Kovalam -->
+      <div class="dest-full-card reveal" data-cat="beach">
+        <div class="dest-full-img">
+          <img src="images/kovalam.png" alt="Kovalam Beach"/>
+          <div class="cat-icon" style="background:rgba(255,107,107,0.2);">🌊</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Beach · Thiruvananthapuram District</div>
+          <div class="dest-full-name">Kovalam Beach</div>
+          <p class="dest-full-desc">Kovalam's crescent-shaped bay with three distinct beaches — Lighthouse Beach, Hawah Beach and Samudra Beach — is Kerala's most internationally famous beach resort town with excellent water sports.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.6</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🏄 Water Sports</span><span>🏠 Lighthouse</span><span>🧖 Ayurveda</span><span>🌅 Sunset View</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹3,000/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. Kumarakom -->
+      <div class="dest-full-card reveal" data-cat="backwaters">
+        <div class="dest-full-img">
+          <img src="images/kumarakom.png" alt="Kumarakom Lake"/>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🏡</div>
+          <span class="badge badge-new" style="top:12px;">✨ Luxury</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Backwaters · Kottayam District</div>
+          <div class="dest-full-name">Kumarakom</div>
+          <p class="dest-full-desc">Set on the banks of Vembanad Lake, Kumarakom is a cluster of tiny islands offering luxury lakeside resorts, bird sanctuaries with rare migratory birds and serene houseboat journeys through paddy fields.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Oct–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🦅 Bird Sanctuary</span><span>🏡 Luxury Resorts</span><span>🚤 Houseboat</span><span>🌅 Vembanad Lake</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹5,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. Athirappilly Falls -->
+      <div class="dest-full-card reveal" data-cat="waterfalls">
+        <div class="dest-full-img">
+          <img src="images/athirappilly.png" alt="Athirappilly Waterfalls"/>
+          <div class="cat-icon" style="background:rgba(0,206,201,0.2);">💧</div>
+          <span class="badge badge-trending" style="top:12px;">🌊 Niagara of India</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Waterfall · Thrissur District</div>
+          <div class="dest-full-name">Athirappilly Falls</div>
+          <p class="dest-full-desc">Often called the "Niagara of India," Athirappilly is Kerala's largest waterfall (80 feet) cascading through the Sholayar forest. It's a filming location for countless Bollywood and Malayalam movies.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Jun–Jan</span>
+          </div>
+          <div class="dest-highlights">
+            <span>💧 80ft Waterfall</span><span>🦜 Hornbills</span><span>🌲 Jungle Trails</span><span>📸 Movie Location</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹1,800/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10. Bekal Fort -->
+      <div class="dest-full-card reveal" data-cat="heritage">
+        <div class="dest-full-img">
+          <img src="images/bekal.png" alt="Bekal Fort"/>
+          <div class="cat-icon" style="background:rgba(255,209,102,0.2);">🏰</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Heritage & Beach · Kasaragod District</div>
+          <div class="dest-full-name">Bekal Fort</div>
+          <p class="dest-full-desc">The largest fort in Kerala, Bekal Fort stands majestically on a 40-acre promontory jutting into the Arabian Sea. Built in the 17th century, it offers panoramic views of the coastline and dramatic sea vistas.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.6</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Oct–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🏰 17th Century Fort</span><span>🌊 Sea Views</span><span>🏖️ Bekal Beach</span><span>🎬 Movie Location</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,200/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 11. Thrissur Pooram -->
+      <div class="dest-full-card reveal" data-cat="heritage">
+        <div class="dest-full-img">
+          <img src="images/thrissur.png" alt="Thrissur Pooram Festival"/>
+          <div class="cat-icon" style="background:rgba(255,209,102,0.2);">🎭</div>
+          <span class="badge badge-hot" style="top:12px;">🎉 Festival</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Culture & Heritage · Thrissur District</div>
+          <div class="dest-full-name">Thrissur & Pooram Festival</div>
+          <p class="dest-full-desc">Thrissur Pooram is India's greatest temple festival — a spectacle of 30+ caparisoned elephants, traditional percussion orchestras, colorful parasols and fireworks. The city of Thrissur is Kerala's cultural capital.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.9</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> April–May</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🐘 30+ Elephants</span><span>🥁 Percussion</span><span>🎆 Fireworks</span><span>🛕 Vadakkumnathan</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Padmanabhaswamy Temple -->
+      <div class="dest-full-card reveal" data-cat="heritage">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#1a0a2e,#2d1b69,#1a3a1a);display:flex;align-items:center;justify-content:center;font-size:5rem;">🛕</div>
+          <div class="cat-icon" style="background:rgba(255,209,102,0.2);">🛕</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Temple · Thiruvananthapuram</div>
+          <div class="dest-full-name">Padmanabhaswamy Temple</div>
+          <p class="dest-full-desc">One of the world's wealthiest temples, dedicated to Lord Vishnu. This Dravidian masterpiece has a history spanning 5000 years. Its vaults are rumored to hold treasures worth over ₹1 trillion. Entry is restricted to Hindus.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.9</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> Half Day</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> All Year</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🏛️ Dravidian Architecture</span><span>💰 World's Richest Temple</span><span>🙏 Spiritual</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">Entry <strong>Free</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 13. Silent Valley -->
+      <div class="dest-full-card reveal" data-cat="wildlife">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#0a2e0a,#1a4a1a,#0d3a1a);display:flex;align-items:center;justify-content:center;font-size:5rem;">🌳</div>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🌳</div>
+          <span class="badge badge-new" style="top:12px;">🌿 UNESCO</span>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">National Park · Palakkad District</div>
+          <div class="dest-full-name">Silent Valley National Park</div>
+          <p class="dest-full-desc">One of India's last undisturbed tropical evergreen forests, Silent Valley is a UNESCO World Heritage Site within the Nilgiri Biosphere Reserve. Home to rare lion-tailed macaques and pristine old-growth rainforest.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Dec–April</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🦁 Lion-tailed Macaque</span><span>🌲 Rainforest</span><span>🚶 Trekking</span><span>🦋 900+ Species</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹1,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 14. Marari Beach -->
+      <div class="dest-full-card reveal" data-cat="beach">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#0a1a2e,#003366,#006699);display:flex;align-items:center;justify-content:center;font-size:5rem;">🏝️</div>
+          <div class="cat-icon" style="background:rgba(255,107,107,0.2);">🏝️</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Beach · Alappuzha District</div>
+          <div class="dest-full-name">Marari Beach</div>
+          <p class="dest-full-desc">Marari is an unspoiled, pristine beach village near Alleppey — far away from the tourist crowds. White sands, swaying coconut palms and a traditional fishing community make it a hidden paradise for relaxation.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.7</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🏖️ Pristine Beach</span><span>🚲 Cycling</span><span>🎣 Fishing</span><span>🌴 Coconut Groves</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹4,000/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. Palakkad (Palghat) -->
+      <div class="dest-full-card reveal" data-cat="hills">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#1a2e0a,#2d4a1a,#1a3a0a);display:flex;align-items:center;justify-content:center;font-size:5rem;">🏯</div>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🏯</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Heritage & Hills · Palakkad District</div>
+          <div class="dest-full-name">Palakkad (Palghat)</div>
+          <p class="dest-full-desc">Gateway to Kerala through the famous Palakkad Gap, this district boasts Tipu Sultan's 18th-century fort, the Malampuzha dam, silent forests and some of Kerala's finest paddy fields and organic farms.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.5</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–March</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🏯 Tipu Sultan's Fort</span><span>🌊 Malampuzha Dam</span><span>🌾 Paddy Fields</span><span>🐘 Nelliyampathy</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹1,800/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 16. Sabarimala -->
+      <div class="dest-full-card reveal" data-cat="heritage">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#2e1a0a,#4a2d0a,#3a2010);display:flex;align-items:center;justify-content:center;font-size:5rem;">⛩️</div>
+          <div class="cat-icon" style="background:rgba(255,209,102,0.2);">⛩️</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Pilgrimage · Pathanamthitta District</div>
+          <div class="dest-full-name">Sabarimala</div>
+          <p class="dest-full-desc">One of the world's largest annual pilgrimage sites, Sabarimala temple dedicated to Lord Ayyappa attracts over 50 million pilgrims annually. Set atop the Sahyadri mountains, the trek through forests is an experience in itself.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.9</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2–3 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–Jan</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🙏 Pilgrimage</span><span>🚶 Forest Trek</span><span>⛰️ 914m Altitude</span><span>🌙 Makaravilakku</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">Entry <strong>Free</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 17. Eravikulam National Park -->
+      <div class="dest-full-card reveal" data-cat="wildlife">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#0a1a0a,#1a3a1a,#0d2d0d);display:flex;align-items:center;justify-content:center;font-size:5rem;">🦌</div>
+          <div class="cat-icon" style="background:rgba(0,229,160,0.2);">🦌</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">National Park · Idukki District</div>
+          <div class="dest-full-name">Eravikulam National Park</div>
+          <p class="dest-full-desc">Home to the highest peak in South India — Anamudi (2695m) — Eravikulam protects the endangered Nilgiri Tahr. The Neelakurinji flowers that bloom here every 12 years turn the entire hillside violet-blue.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.8</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 1–2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Dec–April</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🦌 Nilgiri Tahr</span><span>⛰️ Anamudi Peak</span><span>💜 Neelakurinji</span><span>🌿 Shola Forests</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹2,800/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 18. Kannur -->
+      <div class="dest-full-card reveal" data-cat="heritage">
+        <div class="dest-full-img">
+          <div style="height:100%;background:linear-gradient(135deg,#0a1a2e,#1a2d4a,#0d2040);display:flex;align-items:center;justify-content:center;font-size:5rem;">🥁</div>
+          <div class="cat-icon" style="background:rgba(255,107,107,0.2);">🥁</div>
+        </div>
+        <div class="dest-full-body">
+          <div class="dest-full-cat">Culture & Heritage · Kannur District</div>
+          <div class="dest-full-name">Kannur (Cannanore)</div>
+          <p class="dest-full-desc">Known as the land of Theyyam — a spectacular ritual art form. Kannur also offers St. Angelo Fort, Payyambalam Beach, handloom weaving cooperatives and the historical Arakkal Museum of Kerala's only Muslim royal family.</p>
+          <div class="dest-full-meta">
+            <span class="dest-meta-chip"><i class="fa-solid fa-star" style="color:var(--clr-gold);"></i> 4.6</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-clock"></i> 2 Days</span>
+            <span class="dest-meta-chip"><i class="fa-solid fa-cloud-sun"></i> Nov–April</span>
+          </div>
+          <div class="dest-highlights">
+            <span>🎭 Theyyam</span><span>🏰 St. Angelo Fort</span><span>🧵 Handloom</span><span>🏖️ Payyambalam</span>
+          </div>
+          <div class="dest-footer">
+            <div class="dest-price">From <strong>₹1,500/night</strong></div>
+            <a href="plan-trip.html" class="dest-btn">Plan Visit →</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end dest-full-grid -->
+
+    <div style="text-align:center;margin-top:56px;">
+      <a href="plan-trip.html" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> Create My Kerala Itinerary
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand footer-col">
+        <a href="index.html" class="nav-logo" style="margin-bottom:0;">
+          <div class="logo-icon">🌴</div>
+          <span>Kerala<span class="gradient-text">Trips</span></span>
+        </a>
+        <p>Your intelligent Kerala travel companion. Plan, discover, and experience God's Own Country like never before.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn">📘</a><a href="#" class="social-btn">📸</a><a href="#" class="social-btn">🐦</a><a href="#" class="social-btn">▶️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="destinations.html">All Destinations</a></li>
+          <li><a href="plan-trip.html">Plan Trip</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="register.html">Register</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Top Places</h4>
+        <ul>
+          <li><a href="#">Alleppey Backwaters</a></li>
+          <li><a href="#">Munnar Tea Gardens</a></li>
+          <li><a href="#">Fort Kochi</a></li>
+          <li><a href="#">Thekkady</a></li>
+          <li><a href="#">Wayanad</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#">📧 hello@keralatrips.in</a></li>
+          <li><a href="#">📞 +91 484 000 0000</a></li>
+          <li><a href="#">📍 Kochi, Kerala</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 KeralaTrips. Made with ❤️ for Kerala</div>
+      <div>🌴 God's Own Country · Kerala, India</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50);
+});
+
+// Filter tabs
+document.querySelectorAll('.filter-tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.filter-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const filter=tab.dataset.filter;
+    document.querySelectorAll('.dest-full-card').forEach(card=>{
+      if(filter==='all'||card.dataset.cat===filter){
+        card.style.display='';
+        card.style.animation='scaleIn 0.4s ease both';
+      } else {
+        card.style.display='none';
+      }
+    });
+  });
+});
+
+// Scroll reveal
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting) e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
